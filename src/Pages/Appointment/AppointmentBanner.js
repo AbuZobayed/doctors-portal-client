@@ -1,5 +1,6 @@
 import React from "react";
 import chair from "../../assets/images/chair.png";
+import bg from '../../assets/images/bg.png'
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
@@ -7,7 +8,11 @@ import "react-day-picker/dist/style.css";
 const AppointmentBanner = ({date , setDate}) => {
   
   return (
-    <div class="hero min-h-screen">
+    <div style={{
+        background: `url(${bg})`,
+        backgroundSize: 'cover'
+    }}
+    class="hero min-h-screen">
       <div class="hero-content flex-col lg:flex-row-reverse">
         <img
           src={chair}
@@ -15,7 +20,10 @@ const AppointmentBanner = ({date , setDate}) => {
           alt="Dentist chair"
         />
         <div>
-          <DayPicker mode="single" selected={date} onSelect={setDate} />
+          <DayPicker 
+          mode="single" 
+          selected={date} 
+          onSelect={setDate} />
         </div>
       </div>
     </div>
