@@ -7,28 +7,30 @@ import { signOut } from "firebase/auth";
 const MyAppointments = () => {
   const [appointment, setAppointment] = useState([]);
   const [user] = useAuthState(auth);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:5000/booking?patient=${user.email}` ,{
-        method:'GET',
-        headers:{
-          authorization : `Bearer ${localStorage.getItem('accessToken')}`
+      fetch(
+        `https://protected-ocean-96741.herokuapp.com/booking?patient=${user.email}`,
+        {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
         }
-      })
-        .then((res) =>{ 
-          console.log('res' ,res);
-          if(res.status === 401 || res.status === 403){
+      )
+        .then((res) => {
+          console.log("res", res);
+          if (res.status === 401 || res.status === 403) {
             signOut(auth);
-            localStorage.removeItem('accessToken');
-            navigate('/')
+            localStorage.removeItem("accessToken");
+            navigate("/");
           }
-          return res.json()
+          return res.json();
         })
         .then((data) => {
-
-          setAppointment(data)
+          setAppointment(data);
         });
     }
   }, [user]);
@@ -37,31 +39,29 @@ const MyAppointments = () => {
     <div>
       <h2>My Appointments:{appointment.length}</h2>
       <div class="overflow-x-auto">
-  <table class="table w-full">
-    
-    <thead>
-      <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Treatment</th>
-      </tr>
-    </thead>
-    <tbody>
-        {
-            appointment.map((a , index) =>  <tr>
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Treatment</th>
+            </tr>
+          </thead>
+          <tbody>
+            {appointment.map((a, index) => (
+              <tr>
                 <th>{index + 1}</th>
                 <td>{a.patientName}</td>
                 <td>{a.date}</td>
                 <td>{a.slot}</td>
                 <td>{a.treatment}</td>
-              </tr>)
-        }
-     
-    </tbody>
-  </table>
-</div>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

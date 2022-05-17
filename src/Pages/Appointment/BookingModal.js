@@ -4,7 +4,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
 import { toast } from "react-toastify";
 
-const BookingModal = ({ date, treatment, setTreatment , refetch }) => {
+const BookingModal = ({ date, treatment, setTreatment, refetch }) => {
   const { _id, name, slots } = treatment;
   const [user, loading, error] = useAuthState(auth);
   const formattedDate = format(date, "PP");
@@ -22,7 +22,7 @@ const BookingModal = ({ date, treatment, setTreatment , refetch }) => {
       phone: event.target.phone.value,
     };
 
-    fetch("http://localhost:5000/booking", {
+    fetch("https://protected-ocean-96741.herokuapp.com/booking", {
       method: "POST",
       headers: {
         "content-type": "application/json",
