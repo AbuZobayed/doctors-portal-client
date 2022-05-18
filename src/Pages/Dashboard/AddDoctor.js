@@ -14,8 +14,40 @@ const AddDoctor = () => {
     fetch(`http://localhost:5000/service`).then((res) => res.json())
   );
 
+  const imageStorageKey = `172e663213a432865dba250820b62b83`;
+
+  /**
+   * 3 ways to store images
+   * 1.Third party storage // Free open pubile is ok for Practice Project
+   * 2.Your own storage in your own server (file system)
+   * 3.Database:MongoDb
+   *
+   * YUP: to vaildate file // Search(yup file vaildation for react hook from)
+   */
+
   const onSubmit = async (data) => {
-    console.log("data", data);
+    const image = data.image[0];
+    const formData = new FormData();
+    formData.append("image", image);
+    const url = `https://api.imgbb.com/1/upload?key=${imageStorageKey}`;
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if(result.success){
+          const img = result.data.url;
+          const doctor ={
+            name:data.name,
+            email: data.email,
+            specialty: data.specialty,
+            img: img
+          }
+          // send your database
+        }
+        
+      });
   };
 
   if (isLoading) {
@@ -85,14 +117,15 @@ const AddDoctor = () => {
           <label className="label">
             <span className="label-text">Specialty</span>
           </label>
-          <select {...register('specialty')} class="select w-full max-w-xs">
-
-              {
-                  services.map(service => <option
-                    key={service._id}
-                    value={service.name}
-                  >{service.name}</option> )
-              }
+          <select
+            {...register("specialty")}
+            class="select input-bordered w-full max-w-xs"
+          >
+            {services.map((service) => (
+              <option key={service._id} value={service.name}>
+                {service.name}
+              </option>
+            ))}
           </select>
         </div>
 
